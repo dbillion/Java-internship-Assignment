@@ -1,0 +1,22 @@
+TRANSACTION_ID,STATUS,MESSAGE
+1a83b62a,DECLINED,Amount 76.87 is under the withdraw limit of 83.00
+e9f970d6,APPROVED,OK
+360dadbb,DECLINED,User 69cdb3f1 not found in Users
+2800df11,APPROVED,OK
+83769231,APPROVED,OK
+aba78100,APPROVED,OK
+66420e08,DECLINED,Amount 72.01 is under the withdraw limit of 83.00
+a5974c07,DECLINED,Amount 223.68 is under the withdraw limit of 334.00
+c50c6789,DECLINED,Only DC cards allowed; got CC
+d2724d64,APPROVED,OK
+f0a9fc69,DECLINED,Amount 225.33 is under the withdraw limit of 334.00
+ba9eb88e,DECLINED,Only DC cards allowed; got CC
+79e770ed,APPROVED,OK
+202792a5,APPROVED,OK
+eaa11db9,APPROVED,OK
+d8350eaf,APPROVED,OK
+f1df35e7,APPROVED,OK
+8d98102b,APPROVED,OK
+7b35108b,DECLINED,Amount 224.45 is under the withdraw limit of 334.00
+27e2e863,APPROVED,OK
+fee29626,DECLINED,Amount 74.60 is under the withdraw limit of 83.00

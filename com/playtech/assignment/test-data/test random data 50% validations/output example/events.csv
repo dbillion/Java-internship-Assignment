@@ -1,0 +1,117 @@
+TRANSACTION_ID,STATUS,MESSAGE
+e1391fa4-d193-4223-85ad-88ba170b0093,APPROVED,OK
+30eccc21-2cb4-4e5c-ac7d-8795972389d7,DECLINED,Amount 309.67 is under the withdraw limit of 493.00
+5c96f27e-256a-4e2f-a4dc-ef4dbac4c617,APPROVED,OK
+738713e9-9db3-4cd2-aa92-ca89396d12fb,APPROVED,OK
+a97e4b24-b892-4897-aaa9-af83b5793285,DECLINED,Amount 214.64 is under the withdraw limit of 308.00
+aad58804-4092-4384-bf30-b0ff3d11c546,DECLINED,Amount 302.68 is under the withdraw limit of 493.00
+eb2d9a88-ef8c-4f3a-9a70-88876f6ef8e1,DECLINED,Amount 255.31 is over the deposit limit of 68.00
+8c14a161-70ee-4217-a5d9-82e19c48c238,DECLINED,Amount 242.02 is over the deposit limit of 183.00
+e5962c6a-7c5d-4432-8706-4dfe23211ae7,DECLINED,Amount 236.93 is under the withdraw limit of 355.00
+04c03870-8cce-4735-b265-fff1022da0aa,APPROVED,OK
+25571b83-5f46-4bc8-bd5c-1472c33118e4,APPROVED,OK
+47b2de28-2646-4442-8fd8-bc4fb9ca21a6,APPROVED,OK
+f8018da4-21f9-4fa3-93c0-399ef22b7a2d,DECLINED,Amount 311.56 is under the withdraw limit of 487.00
+989ce606-0a39-4292-96f3-fd4997c7227e,APPROVED,OK
+43f839b3-8a20-432a-ada6-96659e146dfd,APPROVED,OK
+f187a804-6f79-479d-8490-2b2f7bea96a4,DECLINED,Not enough balance to withdraw 72.85 - balance is too low at 66.33
+aa6f4ed3-2923-4b25-8fd8-ab2f8701ac7e,DECLINED,Amount 48.10 is over the deposit limit of 23.00
+ab0fa7df-d2d0-4053-9556-bcfe1b0c5afa,DECLINED,Amount 211.21 is under the withdraw limit of 308.00
+06830482-a462-4638-9923-5642473c5d43,DECLINED,Only DC cards allowed; got CC
+2a30caad-b8a3-4691-bacc-acab84a7440e,APPROVED,OK
+2de244b8-ecca-4363-b5bf-bae0b090a784,APPROVED,OK
+e9ca4323-9104-4c9c-a144-a159b9e04f4a,DECLINED,Amount 253.58 is under the withdraw limit of 406.00
+15e9f322-e444-4e8f-b118-74a918e9d2c4,DECLINED,Cannot withdraw with a new account 529147000070172770
+949105b6-6da8-4ff2-83ec-b543ae740bb2,DECLINED,Amount 231.90 is under the withdraw limit of 355.00
+6c359ac3-28a6-4f6a-abba-d6caab460b72,DECLINED,Amount 240.99 is under the withdraw limit of 355.00
+1a3079bc-000a-48b3-bb0f-cf8611b8d98d,DECLINED,Amount 291.93 is under the withdraw limit of 406.00
+2373f91d-d6a6-4c8b-8fd4-ebc8555ab054,DECLINED,User ff28f0f4-1e2d-4ae7-958a-42aa6c451c9e not found in Users
+afdeb711-93ac-47b5-ad51-2ef1fc54e3e0,DECLINED,Amount 308.40 is under the withdraw limit of 493.00
+ac3cd057-433e-4ecf-9269-b8ae96bf770e,APPROVED,OK
+013746c5-1a13-4e41-9407-dee36945065f,APPROVED,OK
+84a6f3d3-b6e3-4449-9c74-9f2c292a0be9,APPROVED,OK
+32d4da55-5af3-4867-8221-38d91a100e24,DECLINED,Amount 275.97 is under the withdraw limit of 482.00
+01b4e6a7-9a30-498e-b79b-4b3b92b85790,APPROVED,OK
+25571b83-5f46-4bc8-bd5c-1472c33118e4,DECLINED,Transaction 25571b83-5f46-4bc8-bd5c-1472c33118e4 already processed (id non-unique)
+6f54db60-533e-49df-bc25-27cdfa9fcd59,DECLINED,Amount 279.77 is under the withdraw limit of 487.00
+112ab28b-7377-4a7a-afe3-75b2d3267960,APPROVED,OK
+caea9a1f-2b0d-4cfd-8843-d8da629f679a,DECLINED,Amount 93.09 is under the deposit limit of 94.00
+f6536b81-b849-4eef-9c95-ae1dce9bcc1e,APPROVED,OK
+27168671-0ae3-4248-b708-d319ec749d97,DECLINED,Amount 69.27 is under the withdraw limit of 88.00
+34d68a33-4ef8-47a1-8f7c-6e8882e85425,DECLINED,User ff28f0f4-1e2d-4ae7-958a-42aa6c451c9e not found in Users
+e1bd206f-599f-4a4f-870c-ab460411f75c,DECLINED,Amount 214.76 is under the withdraw limit of 308.00
+c2aea040-ec74-4c98-99c8-9b3ec4de34e9,DECLINED,Cannot withdraw with a new account 514421275281020790
+d9eaa72b-30ff-4827-975b-a1d030e17ef9,DECLINED,Amount 238.61 is over the deposit limit of 183.00
+65b1636a-0a13-456c-9755-62d82e0e846c,APPROVED,OK
+e1391fa4-d193-4223-85ad-88ba170b0093,DECLINED,Transaction e1391fa4-d193-4223-85ad-88ba170b0093 already processed (id non-unique)
+3c114944-5b5b-4c65-a26c-1f72311b56cc,APPROVED,OK
+66b208d9-76ae-4d6d-b4dc-853d904b39e4,DECLINED,Amount 175.20 is under the withdraw limit of 252.00
+8a7b3702-c1c1-4d88-919b-a7680fd0314c,DECLINED,Cannot withdraw with a new account 537228175820038111
+8f16f727-64de-4c0d-a449-a1477d19e155,APPROVED,OK
+c837be62-41b0-4653-8727-2ed0af34b891,DECLINED,Only DC cards allowed; got CC
+f7c8a792-a695-44fd-825d-e46cc44640bc,APPROVED,OK
+d2263ff0-b302-478f-b49e-35200bbe02dd,DECLINED,Amount 239.04 is over the deposit limit of 68.00
+a9bbfee7-63f4-4cdc-84b8-d7f16d622c04,DECLINED,Only DC cards allowed; got CC
+8a138450-7fca-43d0-b968-41c3c3d4c6ea,DECLINED,Amount 175.73 is under the withdraw limit of 289.00
+5ec94729-9405-433d-81e5-756d715d3d18,APPROVED,OK
+edf6e1ea-6eb6-46a4-a913-779d825229ff,DECLINED,Amount 89.28 is under the deposit limit of 94.00
+386c9ec1-5e6d-49b3-a398-fc6e89e10b31,DECLINED,Amount 214.52 is under the withdraw limit of 308.00
+a97e4b24-b892-4897-aaa9-af83b5793285,DECLINED,Transaction a97e4b24-b892-4897-aaa9-af83b5793285 already processed (id non-unique)
+80c28c56-81c2-4e1b-8b7c-42193f7fc285,DECLINED,Not enough balance to withdraw 102.98 - balance is too low at 47.05
+79c52231-4ff2-467f-9ff0-ac87724774af,DECLINED,Amount 295.89 is under the withdraw limit of 448.00
+e98d5bc8-29a3-4bf7-9e23-b1e1e386d4fc,DECLINED,Amount 276.34 is under the withdraw limit of 487.00
+c928fd15-6096-49ce-8589-3bf1e99c1513,DECLINED,Amount 276.75 is under the withdraw limit of 406.00
+eb2d9a88-ef8c-4f3a-9a70-88876f6ef8e1,DECLINED,Transaction eb2d9a88-ef8c-4f3a-9a70-88876f6ef8e1 already processed (id non-unique)
+b3329d20-2bf1-4be0-be0b-69f0296eded1,APPROVED,OK
+a83c57de-dfe9-43b0-ba23-681770bac40e,DECLINED,Amount 183.55 is under the withdraw limit of 304.00
+813f54c1-2775-446d-80c3-e6cc2810afe5,DECLINED,User ff28f0f4-1e2d-4ae7-958a-42aa6c451c9e not found in Users
+7e29565a-454e-4a14-a559-393808c0c9f1,DECLINED,Amount 261.45 is under the withdraw limit of 406.00
+647eb413-385b-4468-8312-4015dd11e703,APPROVED,OK
+30eccc21-2cb4-4e5c-ac7d-8795972389d7,DECLINED,Transaction 30eccc21-2cb4-4e5c-ac7d-8795972389d7 already processed (id non-unique)
+ca0dff76-f21d-476b-8eaa-a54409569ae1,DECLINED,Amount 57.56 is over the deposit limit of 23.00
+5e2b4b22-9211-43ef-947a-a5bb33cc8a43,DECLINED,Amount 42.50 is under the withdraw limit of 48.00
+b12f904c-3cfd-4bce-a8da-4c1f7cb61350,DECLINED,Amount 79.43 is under the withdraw limit of 88.00
+f0a0dffe-b422-43ad-b2be-9f6bc2c91d2a,DECLINED,Amount 160.09 is under the withdraw limit of 289.00
+ca2ec87b-2ea9-4250-ade4-a0c246443d1c,DECLINED,Amount 211.07 is under the withdraw limit of 302.00
+b6965002-43a5-44b8-9f53-db48eb758d97,DECLINED,Amount 318.59 is under the withdraw limit of 487.00
+4bfbbdad-bfdb-48d9-9645-3d96baf67857,DECLINED,Amount 190.97 is under the withdraw limit of 304.00
+f4e530d9-38a1-4bc5-a00e-b044abd9a8b1,DECLINED,Amount 186.42 is under the withdraw limit of 304.00
+5bfd57cd-9a75-4df6-8daf-26a8cc2babb0,DECLINED,Only DC cards allowed; got CC
+68a74294-3dd1-4d1a-855a-02c89e1f0724,DECLINED,Amount 296.51 is under the withdraw limit of 487.00
+4ee6da64-96c9-4df1-8452-f9b4431abd3c,DECLINED,Cannot withdraw with a new account 532658000488954527
+195576e4-defa-48eb-aa02-7bec078b08c6,APPROVED,OK
+4a85b9ea-e41b-4f39-bfb4-6af6794bc456,DECLINED,Amount 310.59 is under the withdraw limit of 487.00
+c0e584ee-3113-41fa-979d-eade7e323232,APPROVED,OK
+90610fcc-4161-49ed-8022-b8013e7391a1,DECLINED,Amount 167.99 is over the deposit limit of 122.00
+69c586c7-be4b-4313-be9e-ec406b1d9bf0,DECLINED,Cannot withdraw with a new account 549026033176505844
+a2961f4f-641c-4329-8a34-129068fc3878,DECLINED,Amount 255.90 is over the deposit limit of 68.00
+65b1636a-0a13-456c-9755-62d82e0e846c,DECLINED,Transaction 65b1636a-0a13-456c-9755-62d82e0e846c already processed (id non-unique)
+b3590eba-d017-4faf-892f-21ecbeb3691a,DECLINED,Amount 92.74 is under the deposit limit of 94.00
+10dbfaf2-060f-4d23-b048-4716387f7a72,DECLINED,Amount 273.40 is over the deposit limit of 68.00
+d9eaa72b-30ff-4827-975b-a1d030e17ef9,DECLINED,Transaction d9eaa72b-30ff-4827-975b-a1d030e17ef9 already processed (id non-unique)
+bac6dd91-bb45-4d74-a366-a1920405688d,APPROVED,OK
+fd0fdff5-04d3-4a0a-afc3-be013825c7c4,DECLINED,Amount 306.64 is under the withdraw limit of 493.00
+70da9c72-7377-49f2-82d3-98b2d9894b25,DECLINED,Only DC cards allowed; got CC
+befd0e9e-1b63-4372-a148-0fa0abffde5c,DECLINED,Amount 259.38 is over the deposit limit of 51.00
+caea9a1f-2b0d-4cfd-8843-d8da629f679a,DECLINED,Transaction caea9a1f-2b0d-4cfd-8843-d8da629f679a already processed (id non-unique)
+54fa2261-77ed-453c-a97b-ea2dec7e7b8a,DECLINED,Amount 208.40 is under the withdraw limit of 302.00
+db019a9f-25a9-47b8-816b-395462c84a45,APPROVED,OK
+16ea2171-bac2-49ac-b2f9-24af31a12218,DECLINED,Amount 303.59 is under the withdraw limit of 493.00
+61f259d8-1572-4827-a42a-b960545c5ccd,DECLINED,Amount 250.38 is under the withdraw limit of 355.00
+1af54d15-b92f-421e-b149-977bb160268a,APPROVED,OK
+47dff4a7-12ce-4ee1-a164-479451a26d2b,DECLINED,Only DC cards allowed; got CC
+e8dea79d-f390-441e-80d3-1d033bb3029b,APPROVED,OK
+31347383-4a7d-4c99-8a69-df4906870de8,DECLINED,Amount 167.16 is under the withdraw limit of 252.00
+c4202cc4-823c-418e-bde5-0fd51b5a7da0,DECLINED,Amount 56.11 is under the deposit limit of 80.00
+95f138e3-dfcf-49b5-903d-b50a0cc8e304,DECLINED,User ff28f0f4-1e2d-4ae7-958a-42aa6c451c9e not found in Users
+ee93a85a-3b85-4554-8413-ef8d01097409,DECLINED,Amount 43.52 is under the withdraw limit of 48.00
+2ec225c0-da31-4202-9575-48393eeda6d4,DECLINED,Amount 80.60 is under the withdraw limit of 88.00
+84a8d1b8-a4a2-4411-b727-0d8379e18144,DECLINED,Amount 308.04 is under the withdraw limit of 493.00
+e5f42516-21a2-4a61-9eee-14733976833c,DECLINED,Invalid account country MK; expected BE
+15e9f322-e444-4e8f-b118-74a918e9d2c4,DECLINED,Transaction 15e9f322-e444-4e8f-b118-74a918e9d2c4 already processed (id non-unique)
+7aae7707-755d-4731-99b8-c3e8265857ac,DECLINED,Cannot withdraw with a new account 532658000488954527
+04191afa-87d0-457b-8282-70f2a88a9eb1,DECLINED,Amount 271.54 is under the withdraw limit of 482.00
+1122ec39-ea7b-4206-8661-c97b8bb882a3,DECLINED,Amount 90.20 is under the deposit limit of 94.00
+44aee355-7786-4833-9477-ca882d156284,APPROVED,OK
+159d22a8-7547-4785-a64a-f8e5529a7487,APPROVED,OK
+44aee355-7786-4833-9477-ca882d156284,DECLINED,Transaction 44aee355-7786-4833-9477-ca882d156284 already processed (id non-unique)
