@@ -100,29 +100,23 @@ public class CsvReader {
             }
         } else if (transaction.getMethod() == Transaction.Method.CARD) {
             Optional<BinMapping> binMapping = findBinMapping(binMappingMap, transaction.getAccountNumber());
+            private String toAlpha3(String country) {
+                // Implement the logic to convert country to alpha3 code
+                // ...
+                return alpha3Code;
+            }
+
             if (!binMapping.isPresent() || binMapping.get().getType() != BinMapping.Type.DC) {
                 events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid or non-debit card used"));
                 continue;
             }
-    //         // Additional logic to check card country matches user's country
-    //   String userCountryAlpha3 = toAlpha3(user.getCountry());
-    //     String cardCountryAlpha3 = toAlpha3(binMapping.get().getCountry());
-    //     if (!cardCountryAlpha3.equals(userCountryAlpha3)) {
-    //         events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Card country does not match user's country"));
-    //         continue;
-    //     }
-    // } else {
-    //     events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Unsupported payment method"));
-    //     continue;
-    // }
-
-
-        // Validate transaction amount
-        double amount = transaction.getAmount();
-        if (amount <= 0) {
-            events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid transaction amount"));
-            continue;
-        }
+            // Additional logic to check card country matches user's country
+            String userCountryAlpha3 = toAlpha3(user.getCountry());
+            String cardCountryAlpha3 = toAlpha3(binMapping.get().getCountry());
+            if (!cardCountryAlpha3.equals(userCountryAlpha3)) {
+                events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Card country does not match user's country"));
+                continue;
+            }
         // Further validation for deposit/withdrawal limits
         // Example for deposit limit check
         if (transaction.getType() == Transaction.Type.DEPOSIT && (amount < user.getDepositMin() || amount > user.getDepositMax())) {
@@ -175,7 +169,7 @@ if (transaction.getType() == Transaction.Type.DEPOSIT) {
         //             events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "No matching bin mapping found"));
         //             continue;
         //         }
-           } } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 System.err.println("Error parsing account number for transaction ID " + transaction.getTransactionId() + ": " + e.getMessage());
                 events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid account number format"));
             } catch (Exception e) {
@@ -265,38 +259,6 @@ if (transaction.getType() == Transaction.Type.DEPOSIT) {
         return total == 1;
     }
      
-// 
-// private static final Map<String, String> alpha2ToAlpha3 = new HashMap<>();
-
-// static void populateCountryCodeMap(List<User> users, List<BinMapping> binMappings) {
-//     Set<String> countryCodes = new HashSet<>();
-//     // Extract country codes from users
-//     users.forEach(user -> countryCodes.add(user.getCountry()));
-//     // Extract country codes from bin mappings
-//     binMappings.forEach(binMapping -> countryCodes.add(binMapping.getCountry()));
-    
-//     // Populate the alpha2ToAlpha3 map
-//     countryCodes.forEach(alpha2Code -> {
-//         String alpha3Code = fetchAlpha3Code(alpha2Code); // Assuming this method exists and returns the alpha-3 code
-//         alpha2ToAlpha3.put(alpha2Code, alpha3Code);
-//     });
-// }
-
-// static String toAlpha3(String alpha2Code) {
-//     return alpha2ToAlpha3.getOrDefault(alpha2Code, alpha2Code);
-// }
-
-//  static String toAlpha2(String alpha3Code) {
-//     return alpha2ToAlpha3.entrySet().stream()
-//             .filter(entry -> entry.getValue().equals(alpha3Code))
-//             .map(Map.Entry::getKey)
-//             .findFirst()
-//             .orElse(alpha3Code);
-// }
-
-// 
-
-
 
 }
 class User {
@@ -729,8 +691,8 @@ You can see example in provided template (TransactionProcessorSample.java).
   - `name` - issuing bank name.
   - `range_from` - the lowest possible card number (first 10 digits of card number) that would be identified within this card range, inclusive.
   - `range_to` - the highest possible card number (first 10 digits of card number) that would be identified within this card range, inclusive.
-  - `type` - **DC** for debit and **CC** for credit cards.
-  - `country` - **three**-letter country code, ISO 3166-1 alpha-3.
+- `type` - **DC** for debit and **CC** for credit cards.
+- `country` - **three**-letter country code, ISO 3166-1 alpha-3.
 
 For example, card with number 5168831234567890 corresponds to this entry:\
 AS LHV PANK,5168830000,5168839999,DC,EST\
@@ -790,6 +752,14 @@ Transactions that fail any of the validations should be declined (i.e., the user
 
 The files should normally contain the same amount of lines as the corresponding input files (one line for every user/transaction).
 
+
+Try (final FileWriter writer = new FileWriter(filePath.toFile(), false)) {
+            writer.append("transaction_id,status,message\n");
+            for (final var event : events) {
+                writer.append(event.transactionId).append(",").append(event.status).append(",").append(event.message).append("\n");
+            }
+        }
+    }
  * 
  * 
 */

@@ -6,27 +6,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Stream;
-import java.util.function.Function;
-import com.playtech.assignment.User.FrozenStatus;
-import java.util.stream.Collectors;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Optional;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.regex.Pattern;
+import com.playtech.assignment.User.FrozenStatus;
 
 
 // This template shows input parameters format.
 // It is otherwise not mandatory to use, you can write everything from scratch if you wish.
 public class TransactionProcessorSample {
-
-
-    public static void main(final String[] args) throws IOException {
+       public static void main(final String[] args) throws IOException {
         String baseDir = "com/playtech/assignment";
         String testDirName = "test-data"; // This is dynamic
         String inputDir = "manual test data 75% validations/input";
@@ -51,21 +48,154 @@ public class TransactionProcessorSample {
 
     
         List<User> users = TransactionProcessorSample.readUsers(usersFilePath);
+
+         // Print the first 10 users
+ users.stream().limit(10).forEach(System.out::println);
+
+
         List<Transaction> transactions = TransactionProcessorSample.readTransactions(transactionsFilePath);
+         // Print the first 10 transactions
+ transactions.stream().limit(10).forEach(System.out::println);
+
+
         List<BinMapping> binMappings = TransactionProcessorSample.readBinMappings(binMappingsFilePath);
 
-        List<Event> events = TransactionProcessorSample.processTransactions(users, transactions, binMappings);
+   
 
+ // Print the first 10 bin mappings
+ binMappings.stream().limit(10).forEach(System.out::println);
+        List<Event> events = TransactionProcessorSample.processTransactions(users, transactions, binMappings);
+        events.stream().limit(100).forEach(System.out::println);
       
         
          TransactionProcessorSample.writeBalances(balancesFilePath, users);
+
+
         TransactionProcessorSample.writeEvents(eventsFilePath, events);}
-        catch (IOException e) {
-            e.printStackTrace();
+
+        
+                }
+        private static final Map<String, String> alpha2ToAlpha3 = new HashMap<String, String>() {{
+            put("US", "USA");
+            put("GB", "GBR");
+            // Add more country codes here...
+        }};
+        
+        static String toAlpha3(String alpha2Code) {
+            return alpha2ToAlpha3.getOrDefault(alpha2Code, alpha2Code);
         }
+        
+        static String toAlpha2(String alpha3Code) {
+            return alpha2ToAlpha3.entrySet().stream()
+                    .filter(entry -> entry.getValue().equals(alpha3Code))
+                    .map(Map.Entry::getKey)
+                    .findFirst()
+                    .orElse(alpha3Code);
+        }
+    
+    private static List<Event> processTransactions(final List<User> users, final List<Transaction> transactions, final List<BinMapping> binMappings) {
+        Map<Integer, User> userMap = users.stream()
+                .collect(Collectors.toMap(User::getUserId, Function.identity()));
+        
+        Set<String> transactionIds = new HashSet<>();
+        Set<String> successfulDeposits = new HashSet<>();
+        Map<String, Integer> accountUserMap = new HashMap<>();
+        List<Event> events = new ArrayList<>();
+    
+        // Pre-process binMappings for efficient search
+        TreeMap<Long, BinMapping> binMappingMap = binMappings.stream()
+                .collect(Collectors.toMap(BinMapping::getRangeFrom, Function.identity(),
+                        (existing, replacement) -> existing, TreeMap::new));
+    
+        for (Transaction transaction : transactions) {
+            try {
+                if (!transactionIds.add(transaction.getTransactionId())) {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Transaction ID is not unique"));
+                    continue;
+                }
+    
+                User user = userMap.get(transaction.getUserId());
+                if (user == null || user.isFrozen()) {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "User does not exist or is frozen"));
+                    continue;
+                }
+    
+                // Validate payment method
+                if (transaction.getMethod() == Transaction.Method.TRANSFER) {
+                    if (!isValidIban(transaction.getAccountNumber())) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid IBAN for transfer"));
+                        continue;
+                    }
+                } else if (transaction.getMethod() == Transaction.Method.CARD) {
+                    Optional<BinMapping> binMapping = findBinMapping(binMappingMap, transaction.getAccountNumber());
+                    if (!binMapping.isPresent() || binMapping.get().getType() != BinMapping.Type.DC) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid or non-debit card used"));
+                        continue;
+                    }
+                    // Additional logic to check card country matches user's country
+                    String userCountryAlpha3 = toAlpha3(user.getCountry());
+                    String cardCountryAlpha3 = toAlpha3(binMapping.get().getCountry());
+                    if (!cardCountryAlpha3.equals(userCountryAlpha3)) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Card country does not match user's country"));
+                        continue;
+                    }
+                } else {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Unsupported payment method"));
+                    continue;
+                }
+    
+                // Validate transaction amount
+                double amount = transaction.getAmount();
+                if (amount <= 0) {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid transaction amount"));
+                    continue;
+                }
+                // Further validation for deposit/withdrawal limits
+                // Example for deposit limit check
+                if (transaction.getType() == Transaction.Type.DEPOSIT && (amount < user.getDepositMin() || amount > user.getDepositMax())) {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Transaction amount outside deposit limits"));
+                    continue;
+                }
+    
+                // Validate transaction amount against deposit/withdrawal limits
+                if (transaction.getType() == Transaction.Type.DEPOSIT) {
+                    if (transaction.getAmount() < user.getDepositMin() || transaction.getAmount() > user.getDepositMax()) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Deposit amount out of allowed range"));
+                        continue;
+                    }
+                } else if (transaction.getType() == Transaction.Type.WITHDRAW) {
+                    if (transaction.getAmount() < user.getWithdrawMin() || transaction.getAmount() > user.getWithdrawMax()) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Withdrawal amount out of allowed range"));
+                        continue;
+                    }
+                    // Additionally, check if the user has sufficient balance for withdrawal
+                    if (user.getBalance() < transaction.getAmount()) {
+                        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Insufficient balance for withdrawal"));
+                        continue;
+                    } else {
+                        // Deduct the withdrawal amount from the user's balance
+                        user.setBalance(user.getBalance() - transaction.getAmount());
+                    }
+                } else {
+                    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Unsupported transaction type"));
+                    continue;
+                }
+    
+                // If all validations pass, process the transaction
+                user.setBalance(user.getBalance() + transaction.getAmount());
+                events.add(new Event(transaction.getTransactionId(), Event.STATUS_APPROVED, "Transaction approved"));
+    
+            } catch (NumberFormatException e) {
+                System.err.println("Error parsing account number for transaction ID " + transaction.getTransactionId() + ": " + e.getMessage());
+                events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid account number format"));
+            } catch (Exception e) {
+                System.err.println("Unexpected error processing transaction ID " + transaction.getTransactionId() + ": " + e.getMessage());
+            }
+        } // This closing brace was missing
+    
+        return events;
     }
-
-
+    
 
 private static Optional<BinMapping> findBinMapping(TreeMap<Long, BinMapping> binMappingMap, String accountNumber) {
     try {
@@ -128,148 +258,30 @@ private static List<User> readUsers(final Path filePath) throws IOException {
 }
 
 
-private static boolean isValidIban(String iban) {
-    // Remove non-alphanumeric characters
-    iban = iban.replaceAll("[^A-Za-z0-9]", "");
 
-    // Move the first four characters to the end
-    iban = iban.substring(4) + iban.substring(0, 4);
-
-    // Convert letters to digits and perform mod-97 operation
-    long total = 0;
-    for (int i = 0; i < iban.length(); i++) {
-        int value = Character.digit(iban.charAt(i), 36);
-        total = (total * 10 + value) % 97;
-    }
-
-    return total == 1;
-}
-
-private static List<Event> processTransactions(final List<User> users, final List<Transaction> transactions, final List<BinMapping> binMappings) {
-    Map<Integer, User> userMap = users.stream()
-        .collect(Collectors.toMap(User::getUserId, Function.identity()));
-    
-    Set<String> transactionIds = new HashSet<>();
-    Set<String> successfulDeposits = new HashSet<>();
-    Map<String, Integer> accountUserMap = new HashMap<>();
-    List<Event> events = new ArrayList<>();
-
-     // Pre-process binMappings for efficient search
-TreeMap<Long, BinMapping> binMappingMap = binMappings.stream()
-.collect(Collectors.toMap(BinMapping::getRangeFrom, Function.identity(),
-        (existing, replacement) -> existing, TreeMap::new));
-
-
-for (Transaction transaction : transactions) {
-    try {
-        if (!transactionIds.add(transaction.getTransactionId())) {
-            events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Transaction ID is not unique"));
-            continue;
-        }
-
-        User user = userMap.get(transaction.getUserId());
-        if (user == null || user.isFrozen()) {
-            events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "User does not exist or is frozen"));
-            continue;
-        }
-
-// Validate payment method
-if (transaction.getMethod() == Transaction.Method.TRANSFER) {
-    if (!isValidIban(transaction.getAccountNumber())) {
-        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid IBAN for transfer"));
-        continue;
-    }
-} else if (transaction.getMethod() == Transaction.Method.CARD) {
-    Optional<BinMapping> binMapping = findBinMapping(binMappingMap, transaction.getAccountNumber());
-    if (!binMapping.isPresent() || binMapping.get().getType() != BinMapping.Type.DC) {
-        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid or non-debit card used"));
-        continue;
-    }
-//         // Additional logic to check card country matches user's country
-//   String userCountryAlpha3 = toAlpha3(user.getCountry());
-//     String cardCountryAlpha3 = toAlpha3(binMapping.get().getCountry());
-//     if (!cardCountryAlpha3.equals(userCountryAlpha3)) {
-//         events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Card country does not match user's country"));
-//         continue;
-//     }
-// } else {
-//     events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Unsupported payment method"));
-//     continue;
-// }
-
-
-// Validate transaction amount
-double amount = transaction.getAmount();
-if (amount <= 0) {
-    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid transaction amount"));
-    continue;
-}
-// Further validation for deposit/withdrawal limits
-// Example for deposit limit check
-if (transaction.getType() == Transaction.Type.DEPOSIT && (amount < user.getDepositMin() || amount > user.getDepositMax())) {
-    events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Transaction amount outside deposit limits"));
-    continue;
-}
-
-        // 
-
-
-        if (transaction.getMethod() == Transaction.Method.TRANSFER) {
-            if (!isValidIban(transaction.getAccountNumber())) {
-                events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid IBAN for transfer"));
-                continue;
-            }
-        // } else if (transaction.getMethod() == Transaction.Method.CARD) {
-        //     Optional<BinMapping> binMapping = findBinMapping(binMappingMap, transaction.getAccountNumber());
-        //     if (!binMapping.isPresent() || !binMapping.get().getType().equals(BinMapping.Type.DC)) {
-        //         events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid or non-debit card used"));
-        //         continue;
-        //     }
-        //     // Additional logic to check card country matches user's country
-        // } else {
-            events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Unsupported payment method"));
-            continue;
-        }
-        // Assuming you are inside the loop iterating over transactions
-
-// Validate transaction amount against deposit/withdrawal limits
-if (transaction.getType() == Transaction.Type.DEPOSIT) {
-if (transaction.getAmount() < user.getDepositMin() || transaction.getAmount() > user.getDepositMax()) {
-events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Deposit amount out of allowed range"));
-continue;
-}
-} else if (transaction.getType() == Transaction.Type.WITHDRAW) {
-if (transaction.getAmount() < user.getWithdrawMin() || transaction.getAmount() > user.getWithdrawMax()) {
-events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Withdrawal amount out of allowed range"));
-continue;
-}
-// Additionally, check if the user has sufficient balance for withdrawal
-if (user.getBalance() < transaction.getAmount()) {
-events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Insufficient balance for withdrawal"));
-continue;
-}
-}
-
-        // Further validation for deposit/withdrawal limits
-//    /     Optional<BinMapping> binMapping = findBinMapping(binMappingMap, transaction.getAccountNumber());
-//         if (!binMapping.isPresent()) {
-//             events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "No matching bin mapping found"));
-//             continue;
-//         }
-   } } catch (NumberFormatException e) {
-        System.err.println("Error parsing account number for transaction ID " + transaction.getTransactionId() + ": " + e.getMessage());
-        events.add(new Event(transaction.getTransactionId(), Event.STATUS_DECLINED, "Invalid account number format"));
-    } catch (Exception e) {
-        System.err.println("Unexpected error processing transaction ID " + transaction.getTransactionId() + ": " + e.getMessage());
-    }
-}
-
-return events;
+public static boolean isValidIban(String iban) {
+    String regex = "^([A-Z]{2}[ \\-]?[0-9]{2})(?=(?:[ \\-]?[A-Za-z0-9]){9,30}$)((?:[ \\-]?[A-Za-z0-9]{3,5}){2,7})([ \\-]?[A-Za-z0-9]{1,3})?$";
+    Pattern pattern = Pattern.compile(regex);
+    return pattern.matcher(iban).matches();
 }
 
 
     private static void writeBalances(final Path filePath, final List<User> users) {
-        // ToDo Implementation
+
+        try (final FileWriter writer = new FileWriter(filePath.toFile(), false)) {
+            // Write the header line
+            writer.append("user_id,balance\n");
+            // Iterate over each user and write their ID and balance to the file
+            for (final User user : users) {
+                writer.append(String.valueOf(user.getUserId()))
+                      .append(",")
+                      .append(String.format("%.2f", user.getBalance())) // Format balance to ensure two decimal places
+                      .append("\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            
+        }
     }
     private static void writeEvents(final Path filePath, final List<Event> events) throws IOException {
         try (final FileWriter writer = new FileWriter(filePath.toFile(), false)) {
@@ -658,34 +670,3 @@ class Event {
 }
 
 
-
-// 
-// private static final Map<String, String> alpha2ToAlpha3 = new HashMap<>();
-
-// static void populateCountryCodeMap(List<User> users, List<BinMapping> binMappings) {
-//     Set<String> countryCodes = new HashSet<>();
-//     // Extract country codes from users
-//     users.forEach(user -> countryCodes.add(user.getCountry()));
-//     // Extract country codes from bin mappings
-//     binMappings.forEach(binMapping -> countryCodes.add(binMapping.getCountry()));
-
-//     // Populate the alpha2ToAlpha3 map
-//     countryCodes.forEach(alpha2Code -> {
-//         String alpha3Code = fetchAlpha3Code(alpha2Code); // Assuming this method exists and returns the alpha-3 code
-//         alpha2ToAlpha3.put(alpha2Code, alpha3Code);
-//     });
-// }
-
-// static String toAlpha3(String alpha2Code) {
-//     return alpha2ToAlpha3.getOrDefault(alpha2Code, alpha2Code);
-// }
-
-//  static String toAlpha2(String alpha3Code) {
-//     return alpha2ToAlpha3.entrySet().stream()
-//             .filter(entry -> entry.getValue().equals(alpha3Code))
-//             .map(Map.Entry::getKey)
-//             .findFirst()
-//             .orElse(alpha3Code);
-// }
-
-// 

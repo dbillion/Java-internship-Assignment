@@ -6,28 +6,29 @@ transaction_id,status,message
 10104,DECLINED,Invalid or non-debit card used
 10105,DECLINED,Invalid or non-debit card used
 10106,DECLINED,Invalid or non-debit card used
-10201,DECLINED,Invalid IBAN for transfer
-10202,DECLINED,Invalid IBAN for transfer
-10203,DECLINED,Invalid IBAN for transfer
-10206,DECLINED,Invalid IBAN for transfer
-10207,DECLINED,Invalid IBAN for transfer
-10208,DECLINED,Invalid IBAN for transfer
-10209,DECLINED,Invalid IBAN for transfer
+10201,APPROVED,Transaction approved
+10202,DECLINED,Transaction amount outside deposit limits
+10203,APPROVED,Transaction approved
+10206,APPROVED,Transaction approved
+10207,APPROVED,Transaction approved
+10208,DECLINED,Transaction amount outside deposit limits
+10209,APPROVED,Transaction approved
+10210,APPROVED,Transaction approved
 11001,DECLINED,User does not exist or is frozen
 10301,DECLINED,Invalid or non-debit card used
-10302,DECLINED,Invalid IBAN for transfer
+10302,APPROVED,Transaction approved
 10303,DECLINED,Invalid or non-debit card used
-10304,DECLINED,Invalid IBAN for transfer
+10304,APPROVED,Transaction approved
 10305,DECLINED,Invalid or non-debit card used
 10306,DECLINED,Invalid or non-debit card used
-10307,DECLINED,Invalid IBAN for transfer
+10307,APPROVED,Transaction approved
 10308,DECLINED,Invalid or non-debit card used
 10309,DECLINED,Invalid or non-debit card used
 10310,DECLINED,Invalid or non-debit card used
-10311,DECLINED,Invalid IBAN for transfer
+10311,APPROVED,Transaction approved
 10312,DECLINED,Invalid or non-debit card used
 10401,DECLINED,Invalid or non-debit card used
-10402,DECLINED,Invalid IBAN for transfer
+10402,APPROVED,Transaction approved
 10403,DECLINED,Invalid or non-debit card used
 10501,DECLINED,Invalid or non-debit card used
 10502,DECLINED,Invalid or non-debit card used
