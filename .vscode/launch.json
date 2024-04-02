@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TransactionProcessorSample",
+            "request": "launch",
+            "mainClass": "TransactionProcessorSample",
+            "projectName": "Playtech Java Assignment 2024 1 (2)_5b953637"
+        },
+        {
+            "type": "java",
+            "name": "CSVReader",
+            "request": "launch",
+            "mainClass": "com.dayofinal.assignment.CSVReader",
+            "projectName": "Playtech Java Assignment 2024 1 (2)_5b953637"
+        },
+        {
+            "type": "java",
+            "name": "CSVReader",
+            "request": "launch",
+            "mainClass": "com.playtech.assignment.trial.CSVReader",
+            "projectName": "Playtech Java Assignment 2024 1 (2)_5b953637"
+        },
+        {
+            "type": "java",
             "name": "Testafsg",
             "request": "launch",
             "mainClass": "com.playtech.assignment.Testafsg",
