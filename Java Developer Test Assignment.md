@@ -126,7 +126,4 @@ The files should normally contain the same amount of lines as the corresponding 
 
 - We expect zip file that contains all source code files (.java).
 - You can also include any testing input files you created.
-- Email link to the solution back to us by 04.04.2023 as a reply to the original email the assignment was sent from. Don't mind it's from notifications@smartrecruiters.com, we will get it.
-- Don't send solution as attachment to email. Send it to us via link to Google Drive or some other online file sharing platform.
 
-Feel free to reach out if you need any further clarification. We encourage all submissions, even if they aren't fully completed. Good luck!
